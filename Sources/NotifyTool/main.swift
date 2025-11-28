@@ -91,19 +91,22 @@ func setupBundleForUserNotifications() {
     if FileManager.default.fileExists(atPath: execDirPlist.path) {
         projectInfoPlistPath = execDirPlist
     } else {
-        // Try project root by going up from .build directory
+        // Try project root by going up from .build directory (limit to 5 levels for safety)
         var searchDir = executableDir
-        while searchDir.pathComponents.count > 1 {
+        var levelsSearched = 0
+        let maxLevels = 5
+        while searchDir.pathComponents.count > 1 && levelsSearched < maxLevels {
             let plistPath = searchDir.appendingPathComponent("Info.plist")
             if FileManager.default.fileExists(atPath: plistPath.path) {
                 projectInfoPlistPath = plistPath
                 break
             }
-            // Stop if we've gone too far up (past home directory)
-            if searchDir.pathComponents.last == "Users" {
+            // Stop if we've gone too far up (past home directory or root)
+            if searchDir.pathComponents.last == "Users" || searchDir.path == "/" {
                 break
             }
             searchDir = searchDir.deletingLastPathComponent()
+            levelsSearched += 1
         }
     }
     
