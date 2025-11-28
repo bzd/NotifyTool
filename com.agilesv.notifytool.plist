@@ -1,0 +1,59 @@
+// =====================================================================
+// file: ~/Library/LaunchAgents/com.agilesv.notifytool.plist
+// (LaunchAgent to call notifytool directly in the user GUI session)
+// =====================================================================
+//
+// Save this XML as:
+//   ~/Library/LaunchAgents/com.agilesv.notifytool.plist
+//
+// Adjust the /usr/local/bin/notifytool path and message text as needed.
+//
+
+/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.agilesv.notifytool</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/usr/local/bin/notifytool</string>
+      <string>--title</string>
+      <string>Scheduled Backup</string>
+      <string>--subtitle</string>
+      <string>Nightly Job</string>
+      <string>--body</string>
+      <string>Your nightly backup has completed.</string>
+    </array>
+
+    <!-- Run at login -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Example: run every hour; remove if not needed -->
+    <!--
+    <key>StartInterval</key>
+    <integer>3600</integer>
+    -->
+
+    <!-- Ensure job runs only in GUI (Aqua) session -->
+    <key>LimitLoadToSessionType</key>
+    <array>
+      <string>Aqua</string>
+    </array>
+  </dict>
+</plist>
+*/
+
+// ==========================================
+// LaunchAgent load commands (shell; run manually)
+// ==========================================
+//
+//  launchctl unload "$HOME/Library/LaunchAgents/com.agilesv.notifytool.plist" 2>/dev/null || true
+//  launchctl load "$HOME/Library/LaunchAgents/com.agilesv.notifytool.plist"
+//
+// The notification will appear when the agent runs. You can also make the
+// LaunchAgent call a Python script that then calls notifytool instead of
+// calling notifytool directly by changing ProgramArguments accordingly.
